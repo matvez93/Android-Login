@@ -14,7 +14,6 @@ public class SmartGoogleUser extends SmartUser implements Parcelable{
     public SmartGoogleUser() {
     }
 
-
     protected SmartGoogleUser(Parcel in) {
         super(in);
         displayName = in.readString();

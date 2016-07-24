@@ -7,9 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +25,8 @@ import studios.codelight.smartloginlibrary.users.SmartFacebookUser;
 import studios.codelight.smartloginlibrary.users.SmartGoogleUser;
 import studios.codelight.smartloginlibrary.users.SmartUser;
 
-
 public class MainActivity extends AppCompatActivity implements SmartCustomLogoutListener, SmartCustomLoginListener {
-    //SmartFacebookResult smartFacebookResult;
     TextView loginResult;
-    CheckBox customLogin, facebookLogin;
     SmartUser currentUser;
     GoogleApiClient mGoogleApiClient;
 
@@ -40,11 +34,9 @@ public class MainActivity extends AppCompatActivity implements SmartCustomLogout
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button loginButton = (Button) findViewById(R.id.login_button);
         loginResult = (TextView) findViewById(R.id.login_result);
-        customLogin = (CheckBox) findViewById(R.id.customCheckbox);
 
-        //get the current user details
+        // Get the current user details
         currentUser = UserSessionManager.getCurrentUser(this);
         String display = "no user";
         if(currentUser != null) {
@@ -69,50 +61,41 @@ public class MainActivity extends AppCompatActivity implements SmartCustomLogout
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        if (loginButton != null) {
-            loginButton.setOnClickListener(new View.OnClickListener() {
+        if (currentUser != null) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage(R.string.user_exists);
+            builder.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-
-                    if (currentUser != null) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setMessage(R.string.user_exists);
-                        builder.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                UserSessionManager.logout(MainActivity.this, currentUser, MainActivity.this, mGoogleApiClient);
-                                currentUser = UserSessionManager.getCurrentUser(MainActivity.this);
-                            }
-                        });
-                        builder.setCancelable(true);
-
-                        builder.create().show();
-                    } else {
-
-                        SmartLoginBuilder loginBuilder = new SmartLoginBuilder();
-
-                        //Set facebook permissions
-                        ArrayList<String> permissions = new ArrayList<>();
-                        permissions.add("public_profile");
-                        permissions.add("email");
-                        permissions.add("user_birthday");
-                        permissions.add("user_friends");
-
-
-                        Intent intent = loginBuilder.with(getApplicationContext())
-                                .setAppLogo(R.mipmap.ic_launcher)
-                                .isFacebookLoginEnabled(true)
-                                .withFacebookAppId(getString(R.string.facebook_app_id)).withFacebookPermissions(permissions)
-                                .isGoogleLoginEnabled(true)
-                                .isCustomLoginEnabled(customLogin.isChecked(), SmartLoginConfig.LoginType.withEmail)
-                                .setSmartCustomLoginHelper(MainActivity.this)
-                                .build();
-
-                        startActivityForResult(intent, SmartLoginConfig.LOGIN_REQUEST);
-                        //startActivity(intent);
-                    }
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    UserSessionManager.logout(MainActivity.this, currentUser, MainActivity.this, mGoogleApiClient);
+                    currentUser = UserSessionManager.getCurrentUser(MainActivity.this);
                 }
             });
+            builder.setCancelable(true);
+
+            builder.create().show();
+        } else {
+
+            SmartLoginBuilder loginBuilder = new SmartLoginBuilder();
+
+            // Set facebook permissions
+            ArrayList<String> permissions = new ArrayList<>();
+            permissions.add("public_profile");
+            permissions.add("email");
+            permissions.add("user_birthday");
+            permissions.add("user_friends");
+
+
+            Intent intent = loginBuilder.with(getApplicationContext())
+                    .setAppLogo(R.mipmap.ic_launcher)
+                    .withFacebookAppId(getString(R.string.facebook_app_id)).withFacebookPermissions(permissions)
+                    //TODO Custom Login (true)
+                    .isCustomLoginEnabled(false, SmartLoginConfig.LoginType.withEmail)
+                    .setSmartCustomLoginHelper(MainActivity.this)
+                    .build();
+
+            startActivityForResult(intent, SmartLoginConfig.LOGIN_REQUEST);
+            //startActivity(intent);
         }
     }
 
@@ -161,11 +144,6 @@ public class MainActivity extends AppCompatActivity implements SmartCustomLogout
             String userDetails = user.getUsername() + " (Custom User)";
             loginResult.setText(userDetails);
         }
-        /*else if(resultCode == SmartLoginConfig.CUSTOM_SIGNUP_REQUEST){
-            SmartUser user = data.getParcelableExtra(SmartLoginConfig.USER);
-            String userDetails = user.getUsername() + " (Custom User)";
-            loginResult.setText(userDetails);
-        }*/
         else if(resultCode == RESULT_CANCELED){
             loginResult.setText(fail);
         }

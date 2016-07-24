@@ -313,7 +313,6 @@ public class SmartLoginActivity extends AppCompatActivity implements
                 }
             }
         }
-
     }
 
     private void doCustomSignin() {

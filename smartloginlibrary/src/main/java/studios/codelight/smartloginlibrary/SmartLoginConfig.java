@@ -11,8 +11,6 @@ import java.util.Set;
 public class SmartLoginConfig{
     private int appLogo;
     private boolean isCustomLoginEnabled;
-    private boolean isFacebookEnabled;
-    private boolean isGoogleEnabled;
     private String facebookAppId;
     private ArrayList<String> facebookPermissions;
     private LoginType loginType;
@@ -55,22 +53,6 @@ public class SmartLoginConfig{
         this.isCustomLoginEnabled = isCustomLoginEnabled;
     }
 
-    public boolean isFacebookEnabled() {
-        return isFacebookEnabled;
-    }
-
-    public void setIsFacebookEnabled(boolean isFacebookEnabled) {
-        this.isFacebookEnabled = isFacebookEnabled;
-    }
-
-    public boolean isGoogleEnabled() {
-        return isGoogleEnabled;
-    }
-
-    public void setIsGoogleEnabled(boolean isGoogleEnabled) {
-        this.isGoogleEnabled = isGoogleEnabled;
-    }
-
     public String getFacebookAppId() {
         return facebookAppId;
     }
@@ -108,8 +90,6 @@ public class SmartLoginConfig{
         if(appLogo != 0) {
             bundle.putInt(APPLOGO, appLogo);
         }
-        bundle.putBoolean(FACEBOOKFLAG, isFacebookEnabled);
-        bundle.putBoolean(GOOGLEFLAG, isGoogleEnabled);
         bundle.putString(FACEBOOKID, facebookAppId);
         bundle.putStringArrayList(FACEBOOKPERMISSIONS, facebookPermissions);
         bundle.putBoolean(CUSTOMLOGINFLAG, isCustomLoginEnabled);
@@ -126,12 +106,6 @@ public class SmartLoginConfig{
 
         if(keys.contains(APPLOGO)){
             loginConfig.setAppLogo(bundle.getInt(APPLOGO));
-        }
-        if (keys.contains(FACEBOOKFLAG)){
-            loginConfig.setIsFacebookEnabled(bundle.getBoolean(FACEBOOKFLAG));
-        }
-        if(keys.contains(GOOGLEFLAG)){
-            loginConfig.setIsGoogleEnabled(bundle.getBoolean(GOOGLEFLAG));
         }
         if(keys.contains(FACEBOOKID)){
             loginConfig.setFacebookAppId(bundle.getString(FACEBOOKID));
