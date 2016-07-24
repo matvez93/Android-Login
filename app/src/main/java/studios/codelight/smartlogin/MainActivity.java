@@ -32,7 +32,7 @@ import studios.codelight.smartloginlibrary.users.SmartUser;
 public class MainActivity extends AppCompatActivity implements SmartCustomLogoutListener, SmartCustomLoginListener {
     //SmartFacebookResult smartFacebookResult;
     TextView loginResult;
-    CheckBox customLogin, facebookLogin, googleLogin, appLogoCheckBox;
+    CheckBox customLogin, facebookLogin;
     SmartUser currentUser;
     GoogleApiClient mGoogleApiClient;
 
@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity implements SmartCustomLogout
         Button loginButton = (Button) findViewById(R.id.login_button);
         loginResult = (TextView) findViewById(R.id.login_result);
         customLogin = (CheckBox) findViewById(R.id.customCheckbox);
-        facebookLogin = (CheckBox) findViewById(R.id.facebookCheckbox);
-        googleLogin = (CheckBox) findViewById(R.id.googleCheckbox);
-        appLogoCheckBox = (CheckBox) findViewById(R.id.appLogoCheckbox);
 
         //get the current user details
         currentUser = UserSessionManager.getCurrentUser(this);
@@ -104,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements SmartCustomLogout
 
                         Intent intent = loginBuilder.with(getApplicationContext())
                                 .setAppLogo(R.mipmap.ic_launcher)
-                                .isFacebookLoginEnabled(facebookLogin.isChecked())
+                                .isFacebookLoginEnabled(true)
                                 .withFacebookAppId(getString(R.string.facebook_app_id)).withFacebookPermissions(permissions)
-                                .isGoogleLoginEnabled(googleLogin.isChecked())
+                                .isGoogleLoginEnabled(true)
                                 .isCustomLoginEnabled(customLogin.isChecked(), SmartLoginConfig.LoginType.withEmail)
                                 .setSmartCustomLoginHelper(MainActivity.this)
                                 .build();
