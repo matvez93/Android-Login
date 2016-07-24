@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SmartLogin</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">756876051111318</string>
+
+    <string name="user_exists">User already logged in</string>
+</resources>
